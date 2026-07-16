@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+body {
+  @apply bg-neutral-50 text-neutral-700 font-sans antialiased;
+}
+
+h1, h2, h3 {
+  @apply text-neutral-900 font-bold;
+}
