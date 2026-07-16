@@ -10,9 +10,9 @@ const ProductCard = ({ product }) => {
   return (
     <Link
       to={`/producto/${product._id}`}
-      className="group block bg-white rounded-lg overflow-hidden border border-neutral-200 hover:shadow-md transition"
+      className="group block bg-white rounded-lg overflow-hidden border border-cream-dark hover:shadow-md hover:border-gold/50 transition"
     >
-      <div className="aspect-square bg-neutral-100 flex items-center justify-center overflow-hidden">
+      <div className="aspect-square bg-cream flex items-center justify-center overflow-hidden">
         {image ? (
           <img
             src={image}
@@ -25,7 +25,7 @@ const ProductCard = ({ product }) => {
       </div>
       <div className="p-4">
         <h3 className="text-sm font-medium text-neutral-800 line-clamp-2">{product.nombre}</h3>
-        <p className="mt-1 font-semibold text-rose-600">{currency(product.precio)}</p>
+        <p className="mt-1 font-semibold text-brand">{currency(product.precio)}</p>
       </div>
     </Link>
   );

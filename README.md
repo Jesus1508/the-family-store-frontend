@@ -4,6 +4,15 @@ Tienda en línea de moda (ropa, calzado, bolsos, belleza y cuidado personal),
 con panel administrativo para gestionar el catálogo. React + Vite + Tailwind +
 react-router-dom.
 
+## Requisitos
+
+Node **20 o superior** (Vite 8 no corre en Node 18). Si usas `nvm`, el archivo
+`.nvmrc` ya está en el repo:
+
+```bash
+nvm use
+```
+
 ## Instalación
 
 ```bash

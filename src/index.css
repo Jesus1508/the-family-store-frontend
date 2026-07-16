@@ -1,7 +1,17 @@
 @import "tailwindcss";
 
+@theme {
+  --color-brand: #7a1e1e;
+  --color-brand-dark: #5c1616;
+  --color-brand-light: #a53939;
+  --color-gold: #c9a227;
+  --color-gold-light: #e6cd7a;
+  --color-cream: #faf5ec;
+  --color-cream-dark: #f0e6d2;
+}
+
 body {
-  @apply bg-neutral-50 text-neutral-700 font-sans antialiased;
+  @apply bg-cream text-neutral-700 font-sans antialiased;
 }
 
 h1, h2, h3 {

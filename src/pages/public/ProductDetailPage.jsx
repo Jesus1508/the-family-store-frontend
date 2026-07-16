@@ -36,7 +36,7 @@ const ProductDetailPage = () => {
   return (
     <div className="max-w-5xl mx-auto px-4 py-10 grid md:grid-cols-2 gap-10">
       <div>
-        <div className="aspect-square bg-neutral-100 rounded-lg flex items-center justify-center overflow-hidden">
+        <div className="aspect-square bg-cream rounded-lg flex items-center justify-center overflow-hidden">
           {image ? (
             <img src={image} alt={product.nombre} className="w-full h-full object-cover" />
           ) : (
@@ -50,7 +50,7 @@ const ProductDetailPage = () => {
                 key={img.publicId}
                 onClick={() => setActiveImage(i)}
                 className={`w-16 h-16 rounded-md overflow-hidden border-2 ${
-                  i === activeImage ? "border-rose-500" : "border-transparent"
+                  i === activeImage ? "border-gold" : "border-transparent"
                 }`}
               >
                 <img src={img.url} alt="" className="w-full h-full object-cover" />
@@ -64,13 +64,13 @@ const ProductDetailPage = () => {
         {category && (
           <Link
             to={`/categoria/${category.slug}`}
-            className="text-xs font-semibold uppercase tracking-wide text-rose-600"
+            className="text-xs font-semibold uppercase tracking-wide text-brand"
           >
             {category.label}
           </Link>
         )}
         <h1 className="text-2xl font-bold text-neutral-900 mt-2">{product.nombre}</h1>
-        <p className="text-2xl font-semibold text-rose-600 mt-3">{currency(product.precio)}</p>
+        <p className="text-2xl font-semibold text-brand mt-3">{currency(product.precio)}</p>
         <p className="text-neutral-600 mt-4 whitespace-pre-line">{product.descripcion}</p>
         <p className="text-sm text-neutral-400 mt-6">
           {product.stock > 0 ? `${product.stock} disponibles` : "Sin stock por el momento"}

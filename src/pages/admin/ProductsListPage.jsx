@@ -41,7 +41,7 @@ const ProductsListPage = () => {
         <h1 className="text-xl font-bold text-neutral-900">Productos</h1>
         <Link
           to="/admin/productos/nuevo"
-          className="flex items-center gap-2 bg-rose-600 hover:bg-rose-700 text-white text-sm font-semibold px-4 py-2 rounded transition"
+          className="flex items-center gap-2 bg-brand hover:bg-brand-dark text-white text-sm font-semibold px-4 py-2 rounded transition"
         >
           <Plus size={16} /> Nuevo producto
         </Link>
@@ -52,9 +52,9 @@ const ProductsListPage = () => {
       ) : products.length === 0 ? (
         <p className="text-sm text-neutral-500">No hay productos todavía. Crea el primero.</p>
       ) : (
-        <div className="bg-white border border-neutral-200 rounded-lg overflow-hidden">
+        <div className="bg-white border border-cream-dark rounded-lg overflow-hidden">
           <table className="w-full text-sm text-left">
-            <thead className="bg-neutral-50 text-xs uppercase text-neutral-500">
+            <thead className="bg-cream text-xs uppercase text-neutral-500">
               <tr>
                 <th className="px-4 py-3">Producto</th>
                 <th className="px-4 py-3">Categoría</th>
@@ -74,7 +74,7 @@ const ProductsListPage = () => {
                     <div className="flex justify-end gap-3">
                       <Link
                         to={`/admin/productos/${p._id}/editar`}
-                        className="text-neutral-500 hover:text-rose-600"
+                        className="text-neutral-500 hover:text-brand"
                         aria-label="Editar"
                       >
                         <Pencil size={16} />

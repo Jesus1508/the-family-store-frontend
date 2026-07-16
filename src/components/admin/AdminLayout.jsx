@@ -12,15 +12,15 @@ const AdminLayout = () => {
   };
 
   return (
-    <div className="min-h-screen flex bg-neutral-50">
-      <aside className="w-56 bg-neutral-900 text-neutral-300 flex flex-col">
-        <div className="p-5 text-white font-bold text-lg border-b border-neutral-800">
+    <div className="min-h-screen flex bg-cream">
+      <aside className="w-56 bg-brand-dark text-cream/80 flex flex-col">
+        <div className="p-5 text-gold font-serif font-bold text-lg border-b border-gold/20">
           The Family Store
         </div>
         <nav className="flex-1 p-3 space-y-1">
           <Link
             to="/admin/productos"
-            className="flex items-center gap-2 px-3 py-2 rounded hover:bg-neutral-800 hover:text-white text-sm"
+            className="flex items-center gap-2 px-3 py-2 rounded hover:bg-black/20 hover:text-gold text-sm"
           >
             <Package size={16} /> Productos
           </Link>
@@ -28,16 +28,16 @@ const AdminLayout = () => {
             to="/"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 px-3 py-2 rounded hover:bg-neutral-800 hover:text-white text-sm"
+            className="flex items-center gap-2 px-3 py-2 rounded hover:bg-black/20 hover:text-gold text-sm"
           >
             <Store size={16} /> Ver tienda
           </Link>
         </nav>
-        <div className="p-3 border-t border-neutral-800">
-          <p className="text-xs text-neutral-500 px-3 mb-2">{admin?.email}</p>
+        <div className="p-3 border-t border-gold/20">
+          <p className="text-xs text-cream/50 px-3 mb-2">{admin?.email}</p>
           <button
             onClick={handleLogout}
-            className="flex items-center gap-2 px-3 py-2 rounded hover:bg-neutral-800 hover:text-white text-sm w-full"
+            className="flex items-center gap-2 px-3 py-2 rounded hover:bg-black/20 hover:text-gold text-sm w-full"
           >
             <LogOut size={16} /> Cerrar sesión
           </button>

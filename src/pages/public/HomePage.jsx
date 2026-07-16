@@ -17,8 +17,8 @@ const HomePage = () => {
 
   return (
     <div>
-      <section className="bg-gradient-to-b from-rose-50 to-neutral-50 py-16 text-center px-4">
-        <h1 className="text-4xl font-bold text-neutral-900">The Family Store</h1>
+      <section className="bg-gradient-to-b from-cream-dark to-cream py-16 text-center px-4">
+        <h1 className="text-4xl font-bold font-serif text-brand">The Family Store</h1>
         <p className="mt-3 text-neutral-600 max-w-xl mx-auto">
           Moda, calzado, bolsos, belleza y cuidado personal para toda la familia.
         </p>
@@ -31,7 +31,7 @@ const HomePage = () => {
             <Link
               key={cat.slug}
               to={`/categoria/${cat.slug}`}
-              className="bg-white border border-neutral-200 rounded-lg p-4 text-center text-sm font-medium text-neutral-700 hover:border-rose-400 hover:text-rose-600 transition-colors"
+              className="bg-white border border-cream-dark rounded-lg p-4 text-center text-sm font-medium text-neutral-700 hover:border-gold hover:text-brand transition-colors"
             >
               {cat.label}
             </Link>

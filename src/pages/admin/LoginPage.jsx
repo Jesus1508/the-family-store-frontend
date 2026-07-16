@@ -24,9 +24,9 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-neutral-50 px-4">
-      <form onSubmit={handleSubmit} className="bg-white border border-neutral-200 rounded-lg shadow-sm p-8 w-full max-w-sm">
-        <h1 className="text-xl font-bold text-neutral-900 mb-6 text-center">Panel administrativo</h1>
+    <div className="min-h-screen flex items-center justify-center bg-cream px-4">
+      <form onSubmit={handleSubmit} className="bg-white border border-cream-dark rounded-lg shadow-sm p-8 w-full max-w-sm">
+        <h1 className="text-xl font-bold font-serif text-brand mb-6 text-center">Panel administrativo</h1>
         <div className="space-y-4">
           <input
             type="email"
@@ -34,7 +34,7 @@ const LoginPage = () => {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-3 border border-neutral-300 rounded focus:outline-rose-500"
+            className="w-full p-3 border border-neutral-300 rounded focus:outline-gold"
           />
           <input
             type="password"
@@ -42,12 +42,12 @@ const LoginPage = () => {
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-3 border border-neutral-300 rounded focus:outline-rose-500"
+            className="w-full p-3 border border-neutral-300 rounded focus:outline-gold"
           />
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-rose-600 hover:bg-rose-700 disabled:opacity-60 text-white font-semibold py-3 rounded transition"
+            className="w-full bg-brand hover:bg-brand-dark disabled:opacity-60 text-white font-semibold py-3 rounded transition"
           >
             {loading ? "Entrando…" : "Entrar"}
           </button>
