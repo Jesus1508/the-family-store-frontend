@@ -8,12 +8,16 @@
   --color-gold-light: #e6cd7a;
   --color-cream: #faf5ec;
   --color-cream-dark: #f0e6d2;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-serif: "Playfair Display", Georgia, serif;
 }
 
-body {
-  @apply bg-cream text-neutral-700 font-sans antialiased;
-}
+@layer base {
+  body {
+    @apply bg-cream text-neutral-700 font-sans antialiased;
+  }
 
-h1, h2, h3 {
-  @apply text-neutral-900 font-bold;
+  h1, h2, h3 {
+    @apply text-neutral-900 font-bold;
+  }
 }

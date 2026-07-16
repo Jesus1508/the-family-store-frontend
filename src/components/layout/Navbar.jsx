@@ -1,24 +1,33 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { Menu, X, ShoppingBag } from "lucide-react";
+import { motion } from "framer-motion";
 import categories from "../../data/categories";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="bg-brand text-cream border-b border-gold/30 sticky top-0 z-40">
+    <header className="bg-brand/95 backdrop-blur-sm text-cream border-b border-gold/20 sticky top-0 z-40 shadow-lg shadow-black/10">
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 text-lg font-bold font-serif tracking-wide">
+        <Link to="/" className="flex items-center gap-2 text-xl font-semibold font-serif tracking-wide">
           <ShoppingBag className="text-gold" size={22} />
           The Family Store
         </Link>
 
-        <nav className="hidden md:flex gap-6 text-sm font-medium text-cream/90">
+        <nav className="hidden md:flex gap-1 text-sm font-medium">
           {categories.map((cat) => (
-            <Link key={cat.slug} to={`/categoria/${cat.slug}`} className="hover:text-gold transition-colors">
+            <NavLink
+              key={cat.slug}
+              to={`/categoria/${cat.slug}`}
+              className={({ isActive }) =>
+                `px-3 py-2 rounded-full transition-colors ${
+                  isActive ? "text-gold bg-white/5" : "text-cream/85 hover:text-gold hover:bg-white/5"
+                }`
+              }
+            >
               {cat.label}
-            </Link>
+            </NavLink>
           ))}
         </nav>
 
@@ -28,7 +37,12 @@ const Navbar = () => {
       </div>
 
       {open && (
-        <nav className="md:hidden flex flex-col gap-1 px-4 pb-4 text-sm font-medium text-cream/90">
+        <motion.nav
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: "auto" }}
+          transition={{ duration: 0.2 }}
+          className="md:hidden flex flex-col gap-1 px-4 pb-4 text-sm font-medium text-cream/90 overflow-hidden"
+        >
           {categories.map((cat) => (
             <Link
               key={cat.slug}
@@ -39,7 +53,7 @@ const Navbar = () => {
               {cat.label}
             </Link>
           ))}
-        </nav>
+        </motion.nav>
       )}
     </header>
   );

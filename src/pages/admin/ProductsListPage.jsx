@@ -38,7 +38,7 @@ const ProductsListPage = () => {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-xl font-bold text-neutral-900">Productos</h1>
+        <h1 className="text-2xl font-serif font-semibold text-brand">Productos</h1>
         <Link
           to="/admin/productos/nuevo"
           className="flex items-center gap-2 bg-brand hover:bg-brand-dark text-white text-sm font-semibold px-4 py-2 rounded transition"
