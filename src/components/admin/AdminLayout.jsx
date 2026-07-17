@@ -1,5 +1,5 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { LogOut, Package, Store } from "lucide-react";
+import { LogOut, Package, Store, Tags, Settings } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 
 const AdminLayout = () => {
@@ -23,6 +23,18 @@ const AdminLayout = () => {
             className="flex items-center gap-2 px-3 py-2 rounded hover:bg-black/20 hover:text-gold text-sm"
           >
             <Package size={16} /> Productos
+          </Link>
+          <Link
+            to="/admin/categorias"
+            className="flex items-center gap-2 px-3 py-2 rounded hover:bg-black/20 hover:text-gold text-sm"
+          >
+            <Tags size={16} /> Categorías
+          </Link>
+          <Link
+            to="/admin/configuracion"
+            className="flex items-center gap-2 px-3 py-2 rounded hover:bg-black/20 hover:text-gold text-sm"
+          >
+            <Settings size={16} /> Configuración
           </Link>
           <Link
             to="/"

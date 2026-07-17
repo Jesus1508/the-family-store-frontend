@@ -31,4 +31,16 @@ export const updateProduct = (id, formData) =>
 
 export const deleteProduct = (id) => api.delete(`/products/${id}`).then((r) => r.data);
 
+export const getCategories = (params = {}) => api.get("/categories", { params }).then((r) => r.data);
+
+export const createCategory = (data) => api.post("/categories", data).then((r) => r.data);
+
+export const updateCategory = (id, data) => api.put(`/categories/${id}`, data).then((r) => r.data);
+
+export const deleteCategory = (id) => api.delete(`/categories/${id}`).then((r) => r.data);
+
+export const getSettings = () => api.get("/settings").then((r) => r.data);
+
+export const updateSettings = (data) => api.put("/settings", data).then((r) => r.data);
+
 export default api;

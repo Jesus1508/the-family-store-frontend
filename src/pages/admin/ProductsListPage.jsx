@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 import { getProducts, deleteProduct } from "../../services/APIservice";
-import categories from "../../data/categories";
+import { useCategories } from "../../hooks/useCategories";
 
 const currency = (n) =>
   new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" }).format(n);
@@ -11,6 +11,7 @@ const currency = (n) =>
 const ProductsListPage = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { categories } = useCategories({ all: true });
 
   const load = () => {
     setLoading(true);
@@ -33,7 +34,7 @@ const ProductsListPage = () => {
     }
   };
 
-  const categoryLabel = (slug) => categories.find((c) => c.slug === slug)?.label || slug;
+  const categoryLabel = (slug) => categories.find((c) => c.slug === slug)?.nombre || slug;
 
   return (
     <div>

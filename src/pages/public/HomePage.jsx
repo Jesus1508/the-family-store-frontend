@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Shirt, Footprints, ShoppingBag, Sparkles, Droplet, Truck, ShieldCheck, Gem } from "lucide-react";
-import categories from "../../data/categories";
+import { Shirt, Footprints, ShoppingBag, Sparkles, Droplet, Truck, ShieldCheck, Gem, Tag, Clock } from "lucide-react";
+import { useCategories } from "../../hooks/useCategories";
 import ProductCard from "../../components/ProductCard";
 import { getProducts } from "../../services/APIservice";
 
@@ -22,21 +22,61 @@ const fadeUp = {
   transition: { duration: 0.5 },
 };
 
+const ProductGrid = ({ products, emptyText }) =>
+  products.length === 0 ? (
+    <p className="text-neutral-500 text-sm text-center">{emptyText}</p>
+  ) : (
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      {products.map((p, i) => (
+        <motion.div
+          key={p._id}
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4, delay: (i % 4) * 0.05 }}
+        >
+          <ProductCard product={p} />
+        </motion.div>
+      ))}
+    </div>
+  );
+
 const HomePage = () => {
-  const [products, setProducts] = useState([]);
+  const { categories } = useCategories();
+  const [novedades, setNovedades] = useState([]);
+  const [promociones, setPromociones] = useState([]);
+  const [proximos, setProximos] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getProducts({ limit: 8 })
-      .then((res) => setProducts(res.data))
-      .catch(() => setProducts([]))
+    Promise.all([
+      getProducts({ limit: 8 }),
+      getProducts({ promocion: true, limit: 4 }),
+      getProducts({ proximamente: true, limit: 4 }),
+    ])
+      .then(([n, p, x]) => {
+        setNovedades(n.data);
+        setPromociones(p.data);
+        setProximos(x.data);
+      })
+      .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
 
   return (
     <div>
       <section className="relative overflow-hidden bg-brand text-cream">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(201,162,39,0.15),transparent_45%),radial-gradient(circle_at_80%_60%,rgba(201,162,39,0.12),transparent_45%)]" />
+        <div
+          className="absolute inset-0 opacity-40"
+          style={{
+            backgroundImage:
+              "repeating-linear-gradient(135deg, rgba(201,162,39,0.07) 0px, rgba(201,162,39,0.07) 2px, transparent 2px, transparent 26px)",
+          }}
+        />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_15%,rgba(201,162,39,0.2),transparent_45%),radial-gradient(circle_at_85%_75%,rgba(201,162,39,0.16),transparent_45%),radial-gradient(circle_at_50%_100%,rgba(0,0,0,0.25),transparent_60%)]" />
+        <div className="absolute -top-16 -right-16 w-72 h-72 rounded-full border border-gold/10" />
+        <div className="absolute -bottom-24 -left-10 w-80 h-80 rounded-full border border-gold/10" />
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -60,10 +100,10 @@ const HomePage = () => {
               Ver catálogo
             </Link>
             <a
-              href="#destacados"
+              href="#novedades"
               className="border border-cream/30 hover:border-gold hover:text-gold text-cream font-medium px-6 py-3 rounded-full transition-colors"
             >
-              Productos destacados
+              Ver novedades
             </a>
           </div>
         </motion.div>
@@ -90,7 +130,7 @@ const HomePage = () => {
         </motion.h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {categories.map((cat, i) => {
-            const Icon = categoryIcons[cat.slug];
+            const Icon = categoryIcons[cat.slug] || ShoppingBag;
             return (
               <motion.div
                 key={cat.slug}
@@ -106,7 +146,7 @@ const HomePage = () => {
                   <span className="w-11 h-11 flex items-center justify-center rounded-full bg-cream text-brand group-hover:bg-brand group-hover:text-gold transition-colors">
                     <Icon size={20} />
                   </span>
-                  <span className="text-sm font-medium text-neutral-700 group-hover:text-brand">{cat.label}</span>
+                  <span className="text-sm font-medium text-neutral-700 group-hover:text-brand">{cat.nombre}</span>
                 </Link>
               </motion.div>
             );
@@ -114,32 +154,41 @@ const HomePage = () => {
         </div>
       </section>
 
-      <section id="destacados" className="max-w-7xl mx-auto px-4 pb-20 scroll-mt-24">
+      {promociones.length > 0 && (
+        <section className="bg-brand/5 py-16">
+          <div className="max-w-7xl mx-auto px-4">
+            <motion.div {...fadeUp} className="flex items-center justify-center gap-2 mb-8">
+              <Tag size={20} className="text-gold" />
+              <h2 className="text-2xl font-serif font-semibold text-neutral-900 text-center">Promociones y oportunidades</h2>
+            </motion.div>
+            <ProductGrid products={promociones} emptyText="" />
+          </div>
+        </section>
+      )}
+
+      <section id="novedades" className="max-w-7xl mx-auto px-4 py-16 scroll-mt-24">
         <motion.h2 {...fadeUp} className="text-2xl font-serif font-semibold text-neutral-900 mb-8 text-center">
-          Productos destacados
+          Novedades
         </motion.h2>
         {loading ? (
           <p className="text-neutral-500 text-sm text-center">Cargando productos…</p>
-        ) : products.length === 0 ? (
-          <p className="text-neutral-500 text-sm text-center">
-            Aún no hay productos cargados. Agrega el primero desde el panel de administración.
-          </p>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {products.map((p, i) => (
-              <motion.div
-                key={p._id}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: (i % 4) * 0.05 }}
-              >
-                <ProductCard product={p} />
-              </motion.div>
-            ))}
-          </div>
+          <ProductGrid
+            products={novedades}
+            emptyText="Aún no hay productos cargados. Agrega el primero desde el panel de administración."
+          />
         )}
       </section>
+
+      {proximos.length > 0 && (
+        <section className="max-w-7xl mx-auto px-4 pb-20">
+          <motion.div {...fadeUp} className="flex items-center justify-center gap-2 mb-8">
+            <Clock size={20} className="text-gold" />
+            <h2 className="text-2xl font-serif font-semibold text-neutral-900 text-center">Próximos productos</h2>
+          </motion.div>
+          <ProductGrid products={proximos} emptyText="" />
+        </section>
+      )}
     </div>
   );
 };

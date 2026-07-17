@@ -2,10 +2,11 @@ import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { Menu, X, ShoppingBag } from "lucide-react";
 import { motion } from "framer-motion";
-import categories from "../../data/categories";
+import { useCategories } from "../../hooks/useCategories";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const { categories } = useCategories();
 
   return (
     <header className="bg-brand/95 backdrop-blur-sm text-cream border-b border-gold/20 sticky top-0 z-40 shadow-lg shadow-black/10">
@@ -26,7 +27,7 @@ const Navbar = () => {
                 }`
               }
             >
-              {cat.label}
+              {cat.nombre}
             </NavLink>
           ))}
         </nav>
@@ -50,7 +51,7 @@ const Navbar = () => {
               onClick={() => setOpen(false)}
               className="py-2 border-b border-gold/20 hover:text-gold"
             >
-              {cat.label}
+              {cat.nombre}
             </Link>
           ))}
         </motion.nav>

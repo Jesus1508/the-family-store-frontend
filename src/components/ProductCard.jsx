@@ -1,11 +1,15 @@
 import { Link } from "react-router-dom";
-import { ImageOff, ArrowUpRight, Sparkles } from "lucide-react";
+import { ImageOff, ArrowUpRight, Sparkles, Clock } from "lucide-react";
 
 const currency = (n) =>
   new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" }).format(n);
 
 const ProductCard = ({ product }) => {
   const image = product.imagenes?.[0]?.url;
+  const enPromocion = product.precioOriginal > product.precio;
+  const descuento = enPromocion
+    ? Math.round(((product.precioOriginal - product.precio) / product.precioOriginal) * 100)
+    : 0;
 
   return (
     <Link
@@ -25,6 +29,19 @@ const ProductCard = ({ product }) => {
             <ImageOff size={20} />
           </div>
         )}
+
+        {product.proximamente ? (
+          <span className="absolute top-3 left-3 flex items-center gap-1 bg-brand-dark text-cream text-xs font-semibold px-2.5 py-1 rounded-full">
+            <Clock size={11} /> Próximamente
+          </span>
+        ) : (
+          enPromocion && (
+            <span className="absolute top-3 left-3 bg-gold text-brand-dark text-xs font-bold px-2.5 py-1 rounded-full">
+              -{descuento}%
+            </span>
+          )
+        )}
+
         <span className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 backdrop-blur flex items-center justify-center text-brand opacity-0 group-hover:opacity-100 transition-opacity">
           <ArrowUpRight size={16} />
         </span>
@@ -33,7 +50,16 @@ const ProductCard = ({ product }) => {
         <h3 className="text-sm font-medium text-neutral-800 line-clamp-2 group-hover:text-brand transition-colors">
           {product.nombre}
         </h3>
-        <p className="mt-1.5 font-serif font-semibold text-brand text-lg">{currency(product.precio)}</p>
+        {product.proximamente ? (
+          <p className="mt-1.5 font-serif font-semibold text-brand-dark/70 text-sm">Muy pronto</p>
+        ) : (
+          <p className="mt-1.5 flex items-baseline gap-2">
+            <span className="font-serif font-semibold text-brand text-lg">{currency(product.precio)}</span>
+            {enPromocion && (
+              <span className="text-sm text-neutral-400 line-through">{currency(product.precioOriginal)}</span>
+            )}
+          </p>
+        )}
       </div>
     </Link>
   );

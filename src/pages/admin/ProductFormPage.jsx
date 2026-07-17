@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
+import { Plus, Trash2 } from "lucide-react";
 import { getProduct, createProduct, updateProduct } from "../../services/APIservice";
-import categories from "../../data/categories";
+import { useCategories } from "../../hooks/useCategories";
+
+const CATEGORIAS_CON_TALLAS = ["ropa-dama", "ropa-caballero", "calzado"];
 
 const ProductFormPage = () => {
   const { id } = useParams();
@@ -12,13 +15,20 @@ const ProductFormPage = () => {
   const [loading, setLoading] = useState(isEditing);
   const [submitting, setSubmitting] = useState(false);
   const [existingImages, setExistingImages] = useState([]);
+  const { categories } = useCategories({ all: true });
 
   const {
     register,
     handleSubmit,
     reset,
+    watch,
+    control,
     formState: { errors },
-  } = useForm();
+  } = useForm({ defaultValues: { tallas: [] } });
+
+  const { fields, append, remove } = useFieldArray({ control, name: "tallas" });
+  const categoriaSeleccionada = watch("categoria");
+  const mostrarTallas = CATEGORIAS_CON_TALLAS.includes(categoriaSeleccionada);
 
   useEffect(() => {
     if (!isEditing) return;
@@ -29,9 +39,12 @@ const ProductFormPage = () => {
           nombre: p.nombre,
           descripcion: p.descripcion,
           precio: p.precio,
+          precioOriginal: p.precioOriginal || "",
           categoria: p.categoria,
           stock: p.stock,
           sku: p.sku,
+          proximamente: p.proximamente || false,
+          tallas: p.tallas || [],
         });
         setExistingImages(p.imagenes || []);
       })
@@ -42,10 +55,13 @@ const ProductFormPage = () => {
   const onSubmit = async (values) => {
     setSubmitting(true);
     const formData = new FormData();
+
     Object.entries(values).forEach(([key, value]) => {
-      if (key === "imagenes") return;
+      if (key === "imagenes" || key === "tallas") return;
       formData.append(key, value);
     });
+
+    formData.append("tallas", JSON.stringify(mostrarTallas ? values.tallas : []));
 
     const files = values.imagenes;
     if (files && files.length > 0) {
@@ -107,10 +123,13 @@ const ProductFormPage = () => {
             {errors.precio && <p className="text-xs text-red-600 mt-1">{errors.precio.message}</p>}
           </div>
           <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-1">Stock</label>
+            <label className="block text-sm font-medium text-neutral-700 mb-1">
+              Precio antes de promoción <span className="text-neutral-400">(opcional)</span>
+            </label>
             <input
               type="number"
-              {...register("stock", { required: true, min: 0 })}
+              step="0.01"
+              {...register("precioOriginal", { min: 0 })}
               className="w-full p-2.5 border border-neutral-300 rounded focus:outline-gold"
             />
           </div>
@@ -118,17 +137,12 @@ const ProductFormPage = () => {
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-1">Categoría</label>
-            <select
-              {...register("categoria", { required: true })}
+            <label className="block text-sm font-medium text-neutral-700 mb-1">Stock</label>
+            <input
+              type="number"
+              {...register("stock", { required: true, min: 0 })}
               className="w-full p-2.5 border border-neutral-300 rounded focus:outline-gold"
-            >
-              {categories.map((cat) => (
-                <option key={cat.slug} value={cat.slug}>
-                  {cat.label}
-                </option>
-              ))}
-            </select>
+            />
           </div>
           <div>
             <label className="block text-sm font-medium text-neutral-700 mb-1">SKU</label>
@@ -139,6 +153,64 @@ const ProductFormPage = () => {
             {errors.sku && <p className="text-xs text-red-600 mt-1">{errors.sku.message}</p>}
           </div>
         </div>
+
+        <div>
+          <label className="block text-sm font-medium text-neutral-700 mb-1">Categoría</label>
+          <select
+            {...register("categoria", { required: true })}
+            className="w-full p-2.5 border border-neutral-300 rounded focus:outline-gold"
+          >
+            {categories.map((cat) => (
+              <option key={cat.slug} value={cat.slug}>
+                {cat.nombre}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {mostrarTallas && (
+          <div>
+            <label className="block text-sm font-medium text-neutral-700 mb-2">Tallas y stock por talla</label>
+            <div className="space-y-2">
+              {fields.map((field, index) => (
+                <div key={field.id} className="flex gap-2 items-center">
+                  <input
+                    placeholder="Talla (ej. S, M, 26)"
+                    {...register(`tallas.${index}.talla`, { required: true })}
+                    className="flex-1 p-2 border border-neutral-300 rounded focus:outline-gold text-sm"
+                  />
+                  <input
+                    type="number"
+                    placeholder="Stock"
+                    min={0}
+                    {...register(`tallas.${index}.stock`, { required: true, min: 0 })}
+                    className="w-24 p-2 border border-neutral-300 rounded focus:outline-gold text-sm"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => remove(index)}
+                    className="text-neutral-400 hover:text-red-600"
+                    aria-label="Eliminar talla"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={() => append({ talla: "", stock: 0 })}
+              className="mt-2 flex items-center gap-1.5 text-sm text-brand hover:text-brand-dark font-medium"
+            >
+              <Plus size={14} /> Agregar talla
+            </button>
+          </div>
+        )}
+
+        <label className="flex items-center gap-2 text-sm font-medium text-neutral-700">
+          <input type="checkbox" {...register("proximamente")} className="rounded border-neutral-300" />
+          Marcar como "Próximamente" (no visible para compra todavía)
+        </label>
 
         {existingImages.length > 0 && (
           <div>

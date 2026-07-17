@@ -3,13 +3,14 @@ import { useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { PackageSearch } from "lucide-react";
 import ProductCard from "../../components/ProductCard";
-import categories from "../../data/categories";
+import { useCategories } from "../../hooks/useCategories";
 import { getProducts } from "../../services/APIservice";
 
 const CategoryPage = () => {
   const { slug } = useParams();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { categories } = useCategories();
 
   const category = categories.find((c) => c.slug === slug);
 
@@ -29,7 +30,7 @@ const CategoryPage = () => {
         transition={{ duration: 0.4 }}
         className="text-3xl font-serif font-semibold text-brand mb-8 text-center"
       >
-        {category ? category.label : "Categoría"}
+        {category ? category.nombre : "Categoría"}
       </motion.h1>
 
       {loading ? (
