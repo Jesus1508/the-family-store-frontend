@@ -44,6 +44,7 @@ const ProductFormPage = () => {
           stock: p.stock,
           sku: p.sku,
           proximamente: p.proximamente || false,
+          eliminarAlAgotarse: p.eliminarAlAgotarse || false,
           tallas: p.tallas || [],
         });
         setExistingImages(p.imagenes || []);
@@ -210,6 +211,11 @@ const ProductFormPage = () => {
         <label className="flex items-center gap-2 text-sm font-medium text-neutral-700">
           <input type="checkbox" {...register("proximamente")} className="rounded border-neutral-300" />
           Marcar como "Próximamente" (no visible para compra todavía)
+        </label>
+
+        <label className="flex items-center gap-2 text-sm font-medium text-neutral-700">
+          <input type="checkbox" {...register("eliminarAlAgotarse")} className="rounded border-neutral-300" />
+          Eliminar este producto (y sus imágenes) automáticamente cuando el stock llegue a 0
         </label>
 
         {existingImages.length > 0 && (

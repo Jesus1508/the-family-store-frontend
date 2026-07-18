@@ -1,5 +1,5 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { LogOut, Package, Store, Tags, Settings } from "lucide-react";
+import { LogOut, Package, Store, Tags, Settings, Receipt } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 
 const AdminLayout = () => {
@@ -23,6 +23,12 @@ const AdminLayout = () => {
             className="flex items-center gap-2 px-3 py-2 rounded hover:bg-black/20 hover:text-gold text-sm"
           >
             <Package size={16} /> Productos
+          </Link>
+          <Link
+            to="/admin/pedidos"
+            className="flex items-center gap-2 px-3 py-2 rounded hover:bg-black/20 hover:text-gold text-sm"
+          >
+            <Receipt size={16} /> Ventas
           </Link>
           <Link
             to="/admin/categorias"

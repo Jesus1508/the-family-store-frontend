@@ -11,13 +11,16 @@ import '@fontsource/playfair-display/700.css'
 import './index.css'
 import App from './App.jsx'
 import { AuthProvider } from './context/AuthContext.jsx'
+import { CartProvider } from './context/CartContext.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
       <AuthProvider>
-        <Toaster position="top-right" />
-        <App />
+        <CartProvider>
+          <Toaster position="top-right" />
+          <App />
+        </CartProvider>
       </AuthProvider>
     </BrowserRouter>
   </StrictMode>,

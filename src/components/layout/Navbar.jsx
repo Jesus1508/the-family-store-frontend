@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { Menu, X, ShoppingBag } from "lucide-react";
+import { Menu, X, ShoppingBag, ShoppingCart } from "lucide-react";
 import { motion } from "framer-motion";
 import { useCategories } from "../../hooks/useCategories";
+import { useCart } from "../../context/CartContext";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const { categories } = useCategories();
+  const { count } = useCart();
 
   return (
     <header className="bg-brand/95 backdrop-blur-sm text-cream border-b border-gold/20 sticky top-0 z-40 shadow-lg shadow-black/10">
@@ -32,9 +34,19 @@ const Navbar = () => {
           ))}
         </nav>
 
-        <button className="md:hidden text-cream" onClick={() => setOpen(!open)} aria-label="Abrir menú">
-          {open ? <X /> : <Menu />}
-        </button>
+        <div className="flex items-center gap-2">
+          <Link to="/carrito" className="relative p-2 text-cream hover:text-gold transition-colors" aria-label="Carrito">
+            <ShoppingCart size={20} />
+            {count > 0 && (
+              <span className="absolute -top-1 -right-1 bg-gold text-brand-dark text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                {count}
+              </span>
+            )}
+          </Link>
+          <button className="md:hidden text-cream" onClick={() => setOpen(!open)} aria-label="Abrir menú">
+            {open ? <X /> : <Menu />}
+          </button>
+        </div>
       </div>
 
       {open && (

@@ -43,4 +43,15 @@ export const getSettings = () => api.get("/settings").then((r) => r.data);
 
 export const updateSettings = (data) => api.put("/settings", data).then((r) => r.data);
 
+export const createOrder = (data) => api.post("/orders", data).then((r) => r.data);
+
+export const getOrders = (params = {}) => api.get("/orders", { params }).then((r) => r.data);
+
+export const getOrder = (id) => api.get(`/orders/${id}`).then((r) => r.data);
+
+export const confirmarOrder = (id) => api.patch(`/orders/${id}/confirmar`).then((r) => r.data);
+
+export const cancelarOrder = (id, notasAdmin) =>
+  api.patch(`/orders/${id}/cancelar`, { notasAdmin }).then((r) => r.data);
+
 export default api;
