@@ -1,6 +1,6 @@
 import { useEffect, useState, Fragment } from "react";
 import toast from "react-hot-toast";
-import { ChevronDown, ChevronUp, Check, X } from "lucide-react";
+import { ChevronDown, ChevronUp, Check, X, Truck, Store } from "lucide-react";
 import { getOrders, confirmarOrder, cancelarOrder } from "../../services/APIservice";
 
 const currency = (n) =>
@@ -136,6 +136,26 @@ const OrdersPage = () => {
                             {order.cliente.email && `Email: ${order.cliente.email} · `}
                             Fecha: {new Date(order.createdAt).toLocaleString("es-MX")}
                           </p>
+
+                          <div className="flex items-start gap-1.5 text-sm text-neutral-700 mb-3">
+                            {order.envio?.solicitado ? (
+                              <>
+                                <Truck size={14} className="mt-0.5 flex-shrink-0" />
+                                <span>
+                                  Envío a domicilio ({currency(order.envio.costo)}):{" "}
+                                  {order.envio.direccion?.calle} {order.envio.direccion?.numero},{" "}
+                                  {order.envio.direccion?.colonia}, {order.envio.direccion?.ciudad}, CP{" "}
+                                  {order.envio.direccion?.codigoPostal}
+                                  {order.envio.direccion?.referencias && ` — ${order.envio.direccion.referencias}`}
+                                </span>
+                              </>
+                            ) : (
+                              <>
+                                <Store size={14} className="mt-0.5 flex-shrink-0" /> Recoger en tienda
+                              </>
+                            )}
+                          </div>
+
                           <ul className="space-y-1">
                             {order.items.map((item, i) => (
                               <li key={i} className="text-sm text-neutral-700 flex justify-between">

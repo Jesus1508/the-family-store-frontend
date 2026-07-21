@@ -54,4 +54,20 @@ export const confirmarOrder = (id) => api.patch(`/orders/${id}/confirmar`).then(
 export const cancelarOrder = (id, notasAdmin) =>
   api.patch(`/orders/${id}/cancelar`, { notasAdmin }).then((r) => r.data);
 
+export const createReview = (data) => api.post("/reviews", data).then((r) => r.data);
+
+export const getReviews = (params = {}) => api.get("/reviews", { params }).then((r) => r.data);
+
+export const getAllReviews = (params = {}) => api.get("/reviews/admin", { params }).then((r) => r.data);
+
+export const aprobarReview = (id) => api.patch(`/reviews/${id}/aprobar`).then((r) => r.data);
+
+export const deleteReview = (id) => api.delete(`/reviews/${id}`).then((r) => r.data);
+
+export const getAdmins = () => api.get("/admins").then((r) => r.data);
+
+export const createAdminUser = (data) => api.post("/admins", data).then((r) => r.data);
+
+export const deleteAdminUser = (id) => api.delete(`/admins/${id}`).then((r) => r.data);
+
 export default api;

@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
-import { ImageOff, ArrowUpRight, Sparkles, Clock } from "lucide-react";
+import { ImageOff, ArrowUpRight, Sparkles, Clock, Star } from "lucide-react";
 
 const currency = (n) =>
   new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" }).format(n);
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, mostrarResenas = true }) => {
   const image = product.imagenes?.[0]?.url;
+  const tieneResenas = mostrarResenas && product.totalResenas > 0;
   const enPromocion = product.precioOriginal > product.precio;
   const descuento = enPromocion
     ? Math.round(((product.precioOriginal - product.precio) / product.precioOriginal) * 100)
@@ -14,7 +15,7 @@ const ProductCard = ({ product }) => {
   return (
     <Link
       to={`/producto/${product._id}`}
-      className="group block bg-white rounded-xl overflow-hidden border border-cream-dark hover:shadow-xl hover:shadow-brand/5 hover:-translate-y-1 hover:border-gold/60 transition-all duration-300"
+      className="group h-full flex flex-col bg-white rounded-xl overflow-hidden border border-cream-dark hover:shadow-xl hover:shadow-brand/5 hover:-translate-y-1 hover:border-gold/60 transition-all duration-300"
     >
       <div className="relative aspect-square bg-cream flex items-center justify-center overflow-hidden">
         {image ? (
@@ -46,20 +47,40 @@ const ProductCard = ({ product }) => {
           <ArrowUpRight size={16} />
         </span>
       </div>
-      <div className="p-4">
-        <h3 className="text-sm font-medium text-neutral-800 line-clamp-2 group-hover:text-brand transition-colors">
+      <div className="flex-1 flex flex-col p-4">
+        <h3 className="min-h-[2.5rem] text-sm font-medium text-neutral-800 line-clamp-2 group-hover:text-brand transition-colors">
           {product.nombre}
         </h3>
-        {product.proximamente ? (
-          <p className="mt-1.5 font-serif font-semibold text-brand-dark/70 text-sm">Muy pronto</p>
-        ) : (
-          <p className="mt-1.5 flex items-baseline gap-2">
-            <span className="font-serif font-semibold text-brand text-lg">{currency(product.precio)}</span>
-            {enPromocion && (
-              <span className="text-sm text-neutral-400 line-through">{currency(product.precioOriginal)}</span>
+        {mostrarResenas && (
+          <div className="mt-1 h-4 flex items-center gap-1">
+            {tieneResenas && (
+              <>
+                <div className="flex text-gold">
+                  {Array.from({ length: 5 }, (_, i) => (
+                    <Star
+                      key={i}
+                      size={12}
+                      className={i < Math.round(product.promedioCalificacion) ? "fill-gold" : "text-neutral-300"}
+                    />
+                  ))}
+                </div>
+                <span className="text-xs text-neutral-400">({product.totalResenas})</span>
+              </>
             )}
-          </p>
+          </div>
         )}
+        <div className="mt-auto pt-1.5">
+          {product.proximamente ? (
+            <p className="font-serif font-semibold text-brand-dark/70 text-sm">Muy pronto</p>
+          ) : (
+            <p className="flex items-baseline gap-2">
+              <span className="font-serif font-semibold text-brand text-lg">{currency(product.precio)}</span>
+              {enPromocion && (
+                <span className="text-sm text-neutral-400 line-through">{currency(product.precioOriginal)}</span>
+              )}
+            </p>
+          )}
+        </div>
       </div>
     </Link>
   );

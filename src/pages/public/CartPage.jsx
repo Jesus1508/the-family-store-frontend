@@ -2,19 +2,27 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
-import { Trash2, Minus, Plus, ShoppingBag, CheckCircle2, MessageCircle, Mail } from "lucide-react";
+import { Trash2, Minus, Plus, ShoppingBag, CheckCircle2, MessageCircle, Mail, Truck, Store } from "lucide-react";
 import { useCart } from "../../context/CartContext";
 import { createOrder } from "../../services/APIservice";
 
+const COSTO_ENVIO_LOCAL = 60;
+
 const currency = (n) =>
   new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" }).format(n);
+
+const DIRECCION_VACIA = { calle: "", numero: "", colonia: "", ciudad: "", codigoPostal: "", referencias: "" };
 
 const CartPage = () => {
   const { items, removeItem, updateQuantity, total, clear } = useCart();
   const [cliente, setCliente] = useState({ nombre: "", telefono: "", email: "" });
   const [metodoPago, setMetodoPago] = useState("transferencia");
+  const [deseaEnvio, setDeseaEnvio] = useState(false);
+  const [direccion, setDireccion] = useState(DIRECCION_VACIA);
   const [submitting, setSubmitting] = useState(false);
   const [confirmacion, setConfirmacion] = useState(null);
+
+  const totalConEnvio = total + (deseaEnvio ? COSTO_ENVIO_LOCAL : 0);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,6 +32,7 @@ const CartPage = () => {
         items: items.map((i) => ({ productoId: i.productoId, talla: i.talla, cantidad: i.cantidad })),
         cliente,
         metodoPago,
+        envio: deseaEnvio ? { solicitado: true, direccion } : { solicitado: false },
       });
       setConfirmacion(res.data);
       clear();
@@ -54,8 +63,19 @@ const CartPage = () => {
       >
         <CheckCircle2 size={44} className="text-green-600 mx-auto mb-4" />
         <h1 className="text-2xl font-serif font-semibold text-brand mb-2">¡Pedido recibido!</h1>
-        <p className="text-neutral-500 text-sm mb-8">
+        <p className="text-neutral-500 text-sm mb-2">
           Pedido #{order._id.slice(-6)} · Total {currency(order.total)}
+        </p>
+        <p className="flex items-center justify-center gap-1.5 text-sm text-neutral-600 mb-8">
+          {order.envio?.solicitado ? (
+            <>
+              <Truck size={14} /> Envío a domicilio ({currency(order.envio.costo)})
+            </>
+          ) : (
+            <>
+              <Store size={14} /> Recoger en tienda
+            </>
+          )}
         </p>
 
         <div className="bg-white border border-cream-dark rounded-xl p-6 text-left space-y-2 mb-6">
@@ -171,9 +191,21 @@ const CartPage = () => {
         </div>
 
         <form onSubmit={handleSubmit} className="bg-white border border-cream-dark rounded-lg p-5 space-y-4 h-fit">
-          <div className="flex justify-between text-lg font-serif font-semibold text-brand pb-3 border-b border-cream-dark">
-            <span>Total</span>
-            <span>{currency(total)}</span>
+          <div className="space-y-1 pb-3 border-b border-cream-dark">
+            <div className="flex justify-between text-sm text-neutral-500">
+              <span>Subtotal</span>
+              <span>{currency(total)}</span>
+            </div>
+            {deseaEnvio && (
+              <div className="flex justify-between text-sm text-neutral-500">
+                <span>Envío</span>
+                <span>{currency(COSTO_ENVIO_LOCAL)}</span>
+              </div>
+            )}
+            <div className="flex justify-between text-lg font-serif font-semibold text-brand pt-1">
+              <span>Total</span>
+              <span>{currency(totalConEnvio)}</span>
+            </div>
           </div>
 
           <input
@@ -217,6 +249,64 @@ const CartPage = () => {
                 </label>
               ))}
             </div>
+          </div>
+
+          <div className="border-t border-cream-dark pt-4">
+            <label className="flex items-center gap-2 text-sm font-medium text-neutral-700">
+              <input type="checkbox" checked={deseaEnvio} onChange={(e) => setDeseaEnvio(e.target.checked)} />
+              ¿Deseas envío a domicilio? (+{currency(COSTO_ENVIO_LOCAL)})
+            </label>
+            <p className="text-xs text-neutral-400 mt-1">Si no lo eliges, recoges tu pedido en tienda.</p>
+
+            {deseaEnvio && (
+              <div className="mt-3 space-y-2">
+                <div className="grid grid-cols-2 gap-2">
+                  <input
+                    required
+                    placeholder="Calle"
+                    value={direccion.calle}
+                    onChange={(e) => setDireccion({ ...direccion, calle: e.target.value })}
+                    className="p-2 border border-neutral-300 rounded focus:outline-gold text-sm"
+                  />
+                  <input
+                    required
+                    placeholder="Número"
+                    value={direccion.numero}
+                    onChange={(e) => setDireccion({ ...direccion, numero: e.target.value })}
+                    className="p-2 border border-neutral-300 rounded focus:outline-gold text-sm"
+                  />
+                </div>
+                <input
+                  required
+                  placeholder="Colonia"
+                  value={direccion.colonia}
+                  onChange={(e) => setDireccion({ ...direccion, colonia: e.target.value })}
+                  className="w-full p-2 border border-neutral-300 rounded focus:outline-gold text-sm"
+                />
+                <div className="grid grid-cols-2 gap-2">
+                  <input
+                    required
+                    placeholder="Ciudad"
+                    value={direccion.ciudad}
+                    onChange={(e) => setDireccion({ ...direccion, ciudad: e.target.value })}
+                    className="p-2 border border-neutral-300 rounded focus:outline-gold text-sm"
+                  />
+                  <input
+                    required
+                    placeholder="Código postal"
+                    value={direccion.codigoPostal}
+                    onChange={(e) => setDireccion({ ...direccion, codigoPostal: e.target.value })}
+                    className="p-2 border border-neutral-300 rounded focus:outline-gold text-sm"
+                  />
+                </div>
+                <input
+                  placeholder="Referencias (opcional)"
+                  value={direccion.referencias}
+                  onChange={(e) => setDireccion({ ...direccion, referencias: e.target.value })}
+                  className="w-full p-2 border border-neutral-300 rounded focus:outline-gold text-sm"
+                />
+              </div>
+            )}
           </div>
 
           <p className="text-xs text-neutral-400">

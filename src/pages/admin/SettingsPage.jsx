@@ -93,6 +93,14 @@ const SettingsPage = () => {
           </Field>
         </div>
 
+        <div className="bg-white border border-cream-dark rounded-lg p-6 space-y-4">
+          <h2 className="text-sm font-semibold text-neutral-500 uppercase tracking-wide">Catálogo</h2>
+          <label className="flex items-center gap-2 text-sm font-medium text-neutral-700">
+            <input type="checkbox" {...register("mostrarResenasEnTarjetas")} className="rounded border-neutral-300" />
+            Mostrar calificación con estrellas en las tarjetas de producto (Novedades, categorías, etc.)
+          </label>
+        </div>
+
         <button
           type="submit"
           disabled={isSubmitting}

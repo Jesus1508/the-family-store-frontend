@@ -17,6 +17,8 @@ const ProductFormPage = lazy(() => import("./pages/admin/ProductFormPage"));
 const CategoriesPage = lazy(() => import("./pages/admin/CategoriesPage"));
 const SettingsPage = lazy(() => import("./pages/admin/SettingsPage"));
 const OrdersPage = lazy(() => import("./pages/admin/OrdersPage"));
+const ReviewsPage = lazy(() => import("./pages/admin/ReviewsPage"));
+const UsersPage = lazy(() => import("./pages/admin/UsersPage"));
 
 const StorefrontLayout = ({ children }) => (
   <div className="min-h-screen flex flex-col">
@@ -58,6 +60,8 @@ function App() {
           <Route path="categorias" element={<CategoriesPage />} />
           <Route path="configuracion" element={<SettingsPage />} />
           <Route path="pedidos" element={<OrdersPage />} />
+          <Route path="resenas" element={<ReviewsPage />} />
+          <Route path="usuarios" element={<UsersPage />} />
         </Route>
       </Routes>
     </Suspense>

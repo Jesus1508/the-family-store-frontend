@@ -6,6 +6,7 @@ import { ImageOff, Sparkles, ArrowLeft, Clock, ShoppingCart, Minus, Plus } from 
 import { getProduct } from "../../services/APIservice";
 import { useCategories } from "../../hooks/useCategories";
 import { useCart } from "../../context/CartContext";
+import ReviewsSection from "../../components/ReviewsSection";
 
 const currency = (n) =>
   new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" }).format(n);
@@ -117,6 +118,12 @@ const ProductDetailPage = () => {
             </span>
           )}
           <h1 className="text-3xl font-serif font-semibold text-neutral-900 mt-4">{product.nombre}</h1>
+          {product.totalResenas > 0 && (
+            <p className="text-sm text-neutral-500 mt-1">
+              ★ {product.promedioCalificacion.toFixed(1)} · {product.totalResenas}{" "}
+              {product.totalResenas === 1 ? "reseña" : "reseñas"}
+            </p>
+          )}
 
           {product.proximamente ? (
             <p className="text-lg font-serif font-semibold text-brand-dark/70 mt-3">Disponible muy pronto</p>
@@ -201,6 +208,14 @@ const ProductDetailPage = () => {
               : "Sin stock por el momento"}
           </p>
         </div>
+      </div>
+
+      <div className="mt-16">
+        <ReviewsSection
+          productoId={product._id}
+          promedio={product.promedioCalificacion || 0}
+          total={product.totalResenas || 0}
+        />
       </div>
     </motion.div>
   );

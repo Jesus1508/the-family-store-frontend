@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { PackageSearch } from "lucide-react";
 import ProductCard from "../../components/ProductCard";
 import { useCategories } from "../../hooks/useCategories";
+import { useSettings } from "../../hooks/useSettings";
 import { getProducts } from "../../services/APIservice";
 
 const CategoryPage = () => {
@@ -11,6 +12,8 @@ const CategoryPage = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const { categories } = useCategories();
+  const { settings } = useSettings();
+  const mostrarResenas = settings?.mostrarResenasEnTarjetas ?? true;
 
   const category = categories.find((c) => c.slug === slug);
 
@@ -49,7 +52,7 @@ const CategoryPage = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: (i % 4) * 0.05 }}
             >
-              <ProductCard product={p} />
+              <ProductCard product={p} mostrarResenas={mostrarResenas} />
             </motion.div>
           ))}
         </div>

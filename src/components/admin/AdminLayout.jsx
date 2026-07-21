@@ -1,10 +1,20 @@
-import { Link, Outlet, useNavigate } from "react-router-dom";
-import { LogOut, Package, Store, Tags, Settings, Receipt } from "lucide-react";
+import { useEffect } from "react";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { LogOut, Package, Store, Tags, Settings, Receipt, Star, Users } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
+import { useOrderNotifications } from "../../hooks/useOrderNotifications";
 
 const AdminLayout = () => {
   const { admin, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { unseenCount, markAllSeen } = useOrderNotifications();
+
+  useEffect(() => {
+    if (location.pathname.startsWith("/admin/pedidos")) {
+      markAllSeen();
+    }
+  }, [location.pathname, markAllSeen]);
 
   const handleLogout = () => {
     logout();
@@ -29,6 +39,17 @@ const AdminLayout = () => {
             className="flex items-center gap-2 px-3 py-2 rounded hover:bg-black/20 hover:text-gold text-sm"
           >
             <Receipt size={16} /> Ventas
+            {unseenCount > 0 && (
+              <span className="ml-auto flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-red-500 text-white text-[10px] font-bold">
+                {unseenCount}
+              </span>
+            )}
+          </Link>
+          <Link
+            to="/admin/resenas"
+            className="flex items-center gap-2 px-3 py-2 rounded hover:bg-black/20 hover:text-gold text-sm"
+          >
+            <Star size={16} /> Reseñas
           </Link>
           <Link
             to="/admin/categorias"
@@ -41,6 +62,12 @@ const AdminLayout = () => {
             className="flex items-center gap-2 px-3 py-2 rounded hover:bg-black/20 hover:text-gold text-sm"
           >
             <Settings size={16} /> Configuración
+          </Link>
+          <Link
+            to="/admin/usuarios"
+            className="flex items-center gap-2 px-3 py-2 rounded hover:bg-black/20 hover:text-gold text-sm"
+          >
+            <Users size={16} /> Usuarios
           </Link>
           <Link
             to="/"
