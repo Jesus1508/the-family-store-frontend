@@ -82,7 +82,7 @@ const ProductDetailPage = () => {
         <div>
           <div className="relative aspect-square bg-cream rounded-xl flex items-center justify-center overflow-hidden border border-cream-dark">
             {image ? (
-              <img src={image} alt={product.nombre} className="w-full h-full object-cover" />
+              <img src={image} alt={product.nombre} className="w-full h-full object-contain" />
             ) : (
               <div className="flex flex-col items-center gap-2 text-gold/40">
                 <Sparkles size={36} />
