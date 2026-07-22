@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { Trash2, Minus, Plus, ShoppingBag, CheckCircle2, MessageCircle, Mail, Truck, Store } from "lucide-react";
 import { useCart } from "../../context/CartContext";
 import { createOrder } from "../../services/APIservice";
+import { cloudinaryResize } from "../../utils/cloudinaryImage";
 
 const COSTO_ENVIO_LOCAL = 60;
 
@@ -155,7 +156,13 @@ const CartPage = () => {
               className="flex items-center gap-4 bg-white border border-cream-dark rounded-lg p-3"
             >
               <div className="w-16 h-16 bg-cream rounded-md overflow-hidden flex-shrink-0">
-                {item.imagen && <img src={item.imagen} alt={item.nombre} className="w-full h-full object-cover" />}
+                {item.imagen && (
+                  <img
+                    src={cloudinaryResize(item.imagen, { width: 150, height: 150 })}
+                    alt={item.nombre}
+                    className="w-full h-full object-cover"
+                  />
+                )}
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-neutral-800 truncate">{item.nombre}</p>

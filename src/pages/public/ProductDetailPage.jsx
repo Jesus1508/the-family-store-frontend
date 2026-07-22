@@ -7,6 +7,7 @@ import { getProduct } from "../../services/APIservice";
 import { useCategories } from "../../hooks/useCategories";
 import { useCart } from "../../context/CartContext";
 import ReviewsSection from "../../components/ReviewsSection";
+import { cloudinaryResize } from "../../utils/cloudinaryImage";
 
 const currency = (n) =>
   new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" }).format(n);
@@ -42,7 +43,7 @@ const ProductDetailPage = () => {
     return <p className="max-w-7xl mx-auto px-4 py-10 text-neutral-500 text-sm">Producto no encontrado.</p>;
 
   const category = categories.find((c) => c.slug === product.categoria);
-  const image = product.imagenes?.[activeImage]?.url;
+  const image = cloudinaryResize(product.imagenes?.[activeImage]?.url, { width: 900, height: 900 });
   const enPromocion = product.precioOriginal > product.precio;
   const tieneTallas = product.tallas && product.tallas.length > 0;
 
@@ -104,7 +105,11 @@ const ProductDetailPage = () => {
                     i === activeImage ? "border-gold" : "border-transparent hover:border-cream-dark"
                   }`}
                 >
-                  <img src={img.url} alt="" className="w-full h-full object-cover" />
+                  <img
+                    src={cloudinaryResize(img.url, { width: 150, height: 150 })}
+                    alt=""
+                    className="w-full h-full object-cover"
+                  />
                 </button>
               ))}
             </div>

@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
 import { ImageOff, ArrowUpRight, Sparkles, Clock, Star } from "lucide-react";
+import { cloudinaryResize } from "../utils/cloudinaryImage";
 
 const currency = (n) =>
   new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" }).format(n);
 
 const ProductCard = ({ product, mostrarResenas = true }) => {
-  const image = product.imagenes?.[0]?.url;
+  const image = cloudinaryResize(product.imagenes?.[0]?.url, { width: 500, height: 500 });
   const tieneResenas = mostrarResenas && product.totalResenas > 0;
   const enPromocion = product.precioOriginal > product.precio;
   const descuento = enPromocion
@@ -22,7 +23,7 @@ const ProductCard = ({ product, mostrarResenas = true }) => {
           <img
             src={image}
             alt={product.nombre}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+            className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500"
           />
         ) : (
           <div className="flex flex-col items-center gap-2 text-gold/40">
